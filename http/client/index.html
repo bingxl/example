@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <base href="/">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src unsafe-inline; "> -->
+  <title>nodejs http module test</title>
+
+  <style>
+    video {
+
+    }
+  </style>
+</head>
+<body>
+
+  <video controls></video>
+  <br>
+  <video class="play"></video>
+  <a href="javascript:void 0;" id="download" download>下载视频</a>
+  <button class="start">开始录像</button>
+  <button class="end">停止录像</button>
+  <button class="play-video">播放录像</button>
+  <script>
+    const btn = document.querySelector('button');
+    const playVideo = document.querySelector('video.play');
+    document.querySelector('.start').addEventListener('click', start);
+    document.querySelector('.end').addEventListener('click', end);
+    document.querySelector('.play-video').addEventListener('click', play);
+
+    // MediaRecorder 测试
+    const constraints = {
+      audio: false,
+      video: true,
+    };
+
+    let chunk;
+    const video = document.querySelector('video');
+    const download = document.querySelector('#download');
+    let recorder;
+    let mediaStream;
+    
+    function start() {
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          mediaStream = stream;
+          video.srcObject = stream;
+          video.play();
+          recorder = new MediaRecorder(stream);
+          recorder.ondataavailable = e => {
+            chunk = e.data;
+            download.href = URL.createObjectURL(chunk);
+          };
+          recorder.start();
+        })
+    }
+
+    function end() {
+      video.pause();
+      recorder.stop();
+      mediaStream.getTracks().forEach(track => {
+        track.stop();
+      });
+    }
+
+    function play() {
+      console.log('in play function');
+      console.log('chunk is: ', chunk);
+      
+     playVideo.src = URL.createObjectURL(chunk);
+     playVideo.play();
+    }
+
+  </script>
+</body>
+</html>
