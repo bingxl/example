@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Security-Policy" content="base-url *;">
+  <title>DOM notification</title>
+
+  <style>
+    :root {
+      --main-width: 500px;
+      --second-width: 200px;
+    }
+
+    article {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+    }
+
+    input {
+      height: 2em;
+      width: var(--main-width);
+      display: block;
+      margin: 20px 0;
+    }
+
+    textarea {
+      width: var(--main-width);
+      border: 1px solid #000;
+      display: block;
+    }
+
+    button {
+      display: block;
+      margin: 20px;
+      height: 2em;
+      width: var(--second-width);
+    }
+
+    footer {
+      width: var(--main-width);
+    }
+  </style>
+</head>
+
+<body>
+  <article>
+    <h2>web API notification demo</h2>
+    <input type="text" class="title" placeholder="输入通知标题">
+    <textarea name="input" id="input" cols="30" rows="10" placeholder="请输入通知消息">
+    </textarea>
+    <button class="send">发送通知</button>
+    <footer>
+      Notification.permission 用于获取权限情况， 有 default, granted, denied 三个值。 默认值 default 和拒绝值 denied 时都不会显示通知，需要调用 Notification.requestPermission()
+      发起授权弹窗， 返回值为Notification.permission 值
+    </footer>
+  </article>
+
+  <script>
+
+    const titleEle = document.querySelector('.title');
+    const contentEle = document.querySelector('#input');
+    document.querySelector('.send').addEventListener('click', ev => {
+      const title = titleEle.value.trim();
+      const content = contentEle.value.trim();
+      const notification = () => {
+        console.log('notification');
+        console.log(title, content);
+        const n = new Notification(title, { body: content });
+        console.log(n);
+      }
+      if (!('Notification' in window)) {
+        console.log('你的浏览器不支持 Notification API');
+        alert(`${title} \r ${content}`);
+      } else if (Notification.permission !== 'granted') {
+        Notification.requestPermission(permission => {
+          if (permission === 'granted') {
+            notification();
+          } else {
+            console.log('用户拒绝授予权限')
+          }
+        });
+      } else {
+        notification();
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
