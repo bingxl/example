@@ -68,10 +68,23 @@
       const title = titleEle.value.trim();
       const content = contentEle.value.trim();
       const notification = () => {
-        console.log('notification');
-        console.log(title, content);
         const n = new Notification(title, { body: content });
-        console.log(n);
+        // 注册点击事件
+        n.onclick = (e) => {
+          e.preventDefault();
+          // do something
+          console.log('用户点击了通知');
+        }
+        n.onshow = () => {
+          console.log('正在显示通知');
+        }
+        n.onerror = () => {
+          console.log('发生了错误');
+        }
+
+        n.onclose = () => {
+          console.log('关闭通知');
+        }
       }
       if (!('Notification' in window)) {
         console.log('你的浏览器不支持 Notification API');
