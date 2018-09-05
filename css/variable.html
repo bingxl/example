@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Security-Policy" content="base-uri *; script-src self;">
+  <title>css/variables</title>
+</head>
+
+<style>
+  :root {
+    /* 定义全局变量 */
+    --default-width: 500px;
+    --default-height: 100px;
+    --default-color: #999;
+    --bg-color: #aaaaaa;
+    text-align: center;
+  }
+
+  header, main, footer {
+    width: var(--default-width);
+    height: var(--default-height);
+    border: 1px solid var(--default-color);
+  }
+
+  main {
+    background-color: var(--bg-color);
+  }
+  footer {
+    /* 覆盖全局变量 */
+    --bg-color: blue;
+    background-color: var(--bg-color);
+  }
+</style>
+<body>
+  <article>
+    <header>
+      css 中的变量
+    </header>
+    <main>
+      定义变量时 使用两个中划线开始， 变量也有作用域， 作用域为当前元素和它的子元素，如果在子元素
+      中定义了相同的变量，会发生覆盖， 全局变量可以定义在 :root里面， 或者html、body
+    </main>
+
+    <footer>
+      * css 变量在 IE 中无效
+    </footer>
+  </article>
+</body>
+</html>
