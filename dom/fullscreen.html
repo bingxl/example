@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Security-Policy" content="base-uri *">
+  <title>DOM Fullscreen</title>
+
+  <style>
+    .full {
+      width: 100%;
+      background-color: aquamarine;
+    }
+
+    .full:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="full">
+    this is fullscreen Element ； 样式表里面的
+    <pre>
+      .full:-webkit-full-screen {
+        width: 100%;
+        height: 100%;
+      }
+    </pre>
+    必须有，在有些 webkit 浏览器里，全屏时只是把元素放置在中间，但尺寸不变。
+    为了使目标元素填充整个屏幕， 需要加上上述css代码 <code>.full </code>是需要全屏的元素
+    <hr>
+    <button>全屏切换</button>
+  </div>
+
+  <script>
+    const btn = document.querySelector('button');
+    const full = document.querySelector('.full');
+    fullScreen(full);
+    btn.addEventListener('click', change);
+    function change() {
+      console.log(document.fullscreenElement);
+      if (!document.fullscreenElement) {
+        full.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    /**
+     * 传入需要全屏的元素， 然后就可以使用标准的属性来操作了
+     */
+    function fullScreen(ele) {
+
+      // fullscreenElement 需要动态查询
+      if (!document.fullscreenElement) {
+        Object.defineProperty(document, 'fullscreenElement', {
+          get() {
+            return document.webkitFullscreenElement ||
+              document.mozFullScreenElement ||
+              document.msFullscreenElement;
+          }
+        });
+      }
+
+      document.fullscreenEnabled = document.fullscreenEnabled ||
+        document.webkitFullscreenEnabled ||
+        document.mozFullScreenEnabled ||
+        document.msFullscreenEnabled;
+      document.onfullscreenchange = document.onfullscreenchange ||
+        document.onwebkitfullscreenchange ||
+        document.onmozfullscreenchange ||
+        document.MSFullscreenChange;
+      document.onfullscreenerror = document.onfullscreenerror ||
+        document.onwebkitfullscreenerror ||
+        document.onmozfullscreenerror ||
+        document.MSFullscreenError;
+      document.exitFullscreen = document.exitFullscreen ||
+        document.webkitExitFullscreen ||
+        document.mozCancelFullScreen ||
+        document.msExitFullscreen;
+      ele.requestFullscreen = ele.requestFullscreen ||
+        ele.webkitRequestFullscreen ||
+        ele.mozRequestFullscreen ||
+        ele.msRequestFullscreen;
+      
+      return ele;
+    }
+
+
+  </script>
+</body>
+
+</html>
