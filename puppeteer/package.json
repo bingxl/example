@@ -1,14 +1,14 @@
 {
-  "name": "puppeteer-test",
+  "name": "auto-fill-dailyup",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "西安电子科技大学返校人员每日汇报: 自动填写",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "bingxl",
   "license": "ISC",
-  "dependencies": {
-    "puppeteer": "^1.8.0"
+  "devDependencies": {
+    "puppeteer-core": "^3.0.4"
   }
 }
